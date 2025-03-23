@@ -11,12 +11,11 @@ public class Main{
     private tempSparseMatrix p = new tempSparseMatrix('I', 5);
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         
 
 
         Tarjan g1 = new Tarjan(5);
-
         g1.addEdge(0, 0);
         g1.addEdge(0, 1);
         g1.addEdge(0, 2);
@@ -31,24 +30,12 @@ public class Main{
         System.out.println(g1.SCC());
         // Print the SCCs
         Driver d = new Driver(new tempSparseMatrix(new File("text")), g1.SCC());
+        d.mapSCCs();
+
+        d.buildCondensedMatrix();
+        d.computeTopologicalOrder();
+        d.constructP();
+        
         System.out.println(d);
-
-        d.printSCCs();
-
-        // Highlight the SCCs in the adjacency matrix
-        tempSparseMatrix modifiedMatrix = d.highlightSCCs();
-
-        // Print the modified adjacency matrix
-        d.printAdjMatrix(modifiedMatrix);
-        
-        // d.recursivePermute(d.test.getDim());
-        
-        
-        
-        //Take the output of the Tarjan algorithm and permute the adjacency matrix while maintaining the order of the strongly connected components
-        
-        
-
-    
     }
 }

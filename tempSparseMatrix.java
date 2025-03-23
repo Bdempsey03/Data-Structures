@@ -53,7 +53,7 @@ public class tempSparseMatrix {
         String s = "";
         for(int i = 0; i < matrix.length; i++){
             for(int j = 0; j < matrix[i].length; j++){
-                s += matrix[i][j] + " ";
+                s += matrix[j][i] + " ";
             }
             s += "\n";
         }
