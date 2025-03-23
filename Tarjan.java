@@ -2,7 +2,6 @@
     // Java program to find strongly connected
 // components in a given directed Tarjan
 // using Tarjan's algorithm (single DFS)
-import java.io.*;
 import java.util.*;
 
 // This class represents a directed Tarjan
