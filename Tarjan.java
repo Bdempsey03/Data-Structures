@@ -81,7 +81,7 @@ class Tarjan {
 
 	// The function to do DFS traversal.
 	// It uses SCCUtil()
-	void SCC()
+	public void SCC()
 	{
 
 		// Mark all the vertices as not visited
