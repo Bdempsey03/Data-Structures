@@ -48,7 +48,7 @@ class Tarjan {
 			if (disc[value] == -1) {
 				SCCUtil(value, low, disc, stackMember, st);
 
-				// Check if the subtree rooted with v
+				// Check if the subtree rooted with value
 				// has a connection to one of the
 				// ancestors of u
 				// Case 1 (per above discussion on
@@ -57,7 +57,7 @@ class Tarjan {
 			}
 			else if (stackMember[value] == true) {
 
-				// Update low value of 'u' only if 'v' is
+				// Update low value of 'u' only if 'value' is
 				// still in stack (i.e. it's a back edge,
 				// not cross edge).
 				// Case 2 (per above discussion on Disc
