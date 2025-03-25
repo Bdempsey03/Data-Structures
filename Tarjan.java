@@ -124,7 +124,11 @@ class Tarjan {
 
         System.out.println("SCCs in the graph:");
         System.out.println(graph.SCC());
- 
+
+        int[] newArr = Evaluator.makeInvPerm(testRowIndices, testColPointers, graph.SCC());
+		for(int e: newArr){
+			System.out.print(e + " ");
+		}
     }
 }
 // This code is contributed by
