@@ -2,35 +2,23 @@
     // Java program to find strongly connected
 // components in a given directed Tarjan
 // using Tarjan's algorithm (single DFS)
-import java.io.*;
 import java.util.*;
 
 // This class represents a directed Tarjan
 // using adjacency list representation
 class Tarjan {
 
-	// No. of vertices
-	private int V;
-
-	// Adjacency Lists
-	private LinkedList<Integer> adj[];
-	private int Time;
+	private int[] rowIndices;
+	private int[] colPtrs;
+	private int time;
 
 	// Constructor
-	public Tarjan(int v)
-	{
-		V = v;
-		adj = new LinkedList[v];
-
-		for (int i = 0; i < v; ++i)
-			adj[i] = new LinkedList();
-
-		Time = 0;
+	public Tarjan(int[] rowIndices, int[] colPtrs) {
+		this.rowIndices = rowIndices;
+		this.colPtrs = colPtrs;
+		this.time = 0;
+	
 	}
-
-	// Function to add an edge into the Tarjan
-	void addEdge(int v, int w) { adj[v].add(w); }
-
 	// A recursive function that finds and prints strongly
 	// connected components using DFS traversal
 	// u --> The vertex to be visited next
@@ -44,43 +32,37 @@ class Tarjan {
 	//		 of SCC)
 	// stackMember[] --> bit/index array for faster check
 	//				 whether a node is in stack
-	void SCCUtil(int u, int low[], int disc[],
-				boolean stackMember[], Stack<Integer> st)
-	{
+	private void SCCUtil(int u, int low[], int disc[], boolean stackMember[], Stack<Integer> st) {
 
 		// Initialize discovery time and low value
-		disc[u] = Time;
-		low[u] = Time;
-		Time += 1;
+		disc[u] = time;
+		low[u] = time;
+		time ++;
 		stackMember[u] = true;
 		st.push(u);
 
-		int n;
+		for(int i = colPtrs[u]; i < colPtrs[u + 1]; i++) {
 
-		// Go through all vertices adjacent to this
-		Iterator<Integer> i = adj[u].iterator();
+			int value = rowIndices[i];
 
-		while (i.hasNext()) {
-			n = i.next();
-
-			if (disc[n] == -1) {
-				SCCUtil(n, low, disc, stackMember, st);
+			if (disc[value] == -1) {
+				SCCUtil(value, low, disc, stackMember, st);
 
 				// Check if the subtree rooted with v
 				// has a connection to one of the
 				// ancestors of u
 				// Case 1 (per above discussion on
 				// Disc and Low value)
-				low[u] = Math.min(low[u], low[n]);
+				low[u] = Math.min(low[u], low[value]);
 			}
-			else if (stackMember[n] == true) {
+			else if (stackMember[value] == true) {
 
 				// Update low value of 'u' only if 'v' is
 				// still in stack (i.e. it's a back edge,
 				// not cross edge).
 				// Case 2 (per above discussion on Disc
 				// and Low value)
-				low[u] = Math.min(low[u], disc[n]);
+				low[u] = Math.min(low[u], disc[value]);
 			}
 		}
 
@@ -99,26 +81,26 @@ class Tarjan {
 
 	// The function to do DFS traversal.
 	// It uses SCCUtil()
-	void SCC()
+	public void SCC()
 	{
 
 		// Mark all the vertices as not visited
 		// and Initialize parent and visited,
 		// and ap(articulation point) arrays
-		int disc[] = new int[V];
-		int low[] = new int[V];
-		for (int i = 0; i < V; i++) {
+		int disc[] = new int[colPtrs.length - 1];
+		int low[] = new int[colPtrs.length - 1];
+		for (int i = 0; i < (colPtrs.length - 1); i++) {
 			disc[i] = -1;
 			low[i] = -1;
 		}
 
-		boolean stackMember[] = new boolean[V];
+		boolean stackMember[] = new boolean[colPtrs.length - 1];
 		Stack<Integer> st = new Stack<Integer>();
 
 		// Call the recursive helper function
 		// to find articulation points
 		// in DFS tree rooted with vertex 'i'
-		for (int i = 0; i < V; i++) {
+		for (int i = 0; i < colPtrs.length - 1; i++) {
 			if (disc[i] == -1)
 				SCCUtil(i, low, disc, stackMember, st);
 		}
@@ -129,26 +111,15 @@ class Tarjan {
     {
  
         // Create a Tarjan given in the above diagram
-        Tarjan g1 = new Tarjan(5);
- 
-        g1.addEdge(0, 0);
-        g1.addEdge(0, 1);
-        g1.addEdge(0, 2);
-        g1.addEdge(1, 1);
-        g1.addEdge(1, 4);
-        g1.addEdge(2, 1);
-        g1.addEdge(2, 2);
-        g1.addEdge(3, 3);
-        g1.addEdge(3, 4);
-        g1.addEdge(4, 3);
-        g1.addEdge(4, 4);
+        int[] testRowIndices = {0, 1, 2, 1, 4, 1, 2, 3, 4, 3, 4};  // Edges stored in order
+        int[] testColPointers = {0, 1, 3, 6, 8, 11};  // Start index of each column
 
+        Tarjan graph = new Tarjan(testRowIndices, testColPointers);
 
-        System.out.println("SSC in first Tarjan ");
-        g1.SCC();
+        System.out.println("SCCs in the graph:");
+        graph.SCC();
  
     }
 }
-
 // This code is contributed by
 // Prateek Gupta (@prateekgupta10)
