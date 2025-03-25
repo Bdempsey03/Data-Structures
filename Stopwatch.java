@@ -1,7 +1,7 @@
 public class Stopwatch {
     
-    private long startTime;
-    private long endTime;
+    private double startTime;
+    private double endTime;
 
     public void start(){
         startTime = System.currentTimeMillis();
@@ -9,12 +9,12 @@ public class Stopwatch {
     public void stop(){
         endTime = System.currentTimeMillis();
     }
-    public long elapsedTime(){//returns seconds
+    public double elapsedTime(){//returns seconds
         return (endTime - startTime);
     }
     public void reset(){
-        startTime = 0;
-        endTime = 0;
+        startTime = 0.0;
+        endTime = 0.0;
     }
 
 

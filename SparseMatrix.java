@@ -68,8 +68,8 @@ public class SparseMatrix {
             }
 
         }
-        System.out.println(Arrays.toString(this.getRows()));
-        System.out.println(Arrays.toString(this.getCols()));
+        // System.out.println(Arrays.toString(this.getRows()));
+        // System.out.println(Arrays.toString(this.getCols()));
     }
 
     public int getNnz() {

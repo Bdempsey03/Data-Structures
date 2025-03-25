@@ -1,11 +1,10 @@
 import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 
-public class Main{
+public class Main {
 
-
-
-    private static SparseMatrix input1; //has getRow, getVal, getCol
+    private static SparseMatrix input1; // has getRow, getVal, getCol
     private static SparseMatrix input2;
     private static SparseMatrix input3;
     private static SparseMatrix input4;
@@ -18,22 +17,26 @@ public class Main{
 
     private static Stopwatch stopwatch = new Stopwatch();
 
-    private static int[][] tarjanOutput; //output of Tarjan algorithm
-    private static int[][] kosarajuOutput; //output of Kosaraju algorithm
-    private SparseMatrix best;
-
+    private static int[][] tarjanOutput; // output of Tarjan algorithm
+    private static int[][] kosarajuOutput; // output of Kosaraju algorithm
+    private static String[] filePaths = { "./Data/California.mtx", "./Data/EPA.mtx", "./Data/EVA.mtx",
+            "./Data/GD98_a.mtx", "./Data/GD99_c.mtx", "./Data/GlossGT.mtx", "./Data/HEP-th-new.mtx",
+            "./Data/HEP-th.mtx", "./Data/Tina_AskCal.mtx", "./Data/wb-cs-stanford.mtx" };
 
     public static void main(String[] args) throws Exception {
-        input1 = new SparseMatrix(new File("./Data/California.mtx"));
-        input2 = new SparseMatrix(new File("./Data/EPA.mtx"));
-        input3 = new SparseMatrix(new File("./Data/EVA.mtx"));
-        input4 = new SparseMatrix(new File("./Data/GD98_a.mtx"));
-        input5 = new SparseMatrix(new File("./Data/GD99_c.mtx"));
-        input6 = new SparseMatrix(new File("./Data/GlossGT.mtx"));
-        input7 = new SparseMatrix(new File("./Data/HEP-th-new.mtx"));
-        input8 = new SparseMatrix(new File("./Data/HEP-th.mtx"));
-        input9 = new SparseMatrix(new File("./Data/Tina_AskCal.mtx"));
-        input10 = new SparseMatrix(new File("./Data/wb-cs-stanford.mtx"));
+
+        Evaluator evaluator = new Evaluator(); //what the hell
+
+        input1 = new SparseMatrix(new File(filePaths[0]));
+        input2 = new SparseMatrix(new File(filePaths[1]));
+        input3 = new SparseMatrix(new File(filePaths[2]));
+        input4 = new SparseMatrix(new File(filePaths[3]));
+        input5 = new SparseMatrix(new File(filePaths[4]));
+        input6 = new SparseMatrix(new File(filePaths[5]));
+        input7 = new SparseMatrix(new File(filePaths[6]));
+        input8 = new SparseMatrix(new File(filePaths[7]));
+        input9 = new SparseMatrix(new File(filePaths[8]));
+        input10 = new SparseMatrix(new File(filePaths[9]));
 
         Tarjan tarjan1 = new Tarjan(input1.getRows(), input1.getCols());
         Tarjan tarjan2 = new Tarjan(input2.getRows(), input2.getCols());
@@ -46,7 +49,7 @@ public class Main{
         Tarjan tarjan9 = new Tarjan(input9.getRows(), input9.getCols());
         Tarjan tarjan10 = new Tarjan(input10.getRows(), input10.getCols());
 
-        Kosaraju kosaraju1 = new Kosaraju(input1.getRows(), input2.getCols());
+        Kosaraju kosaraju1 = new Kosaraju(input1.getRows(), input1.getCols());
         Kosaraju kosaraju2 = new Kosaraju(input2.getRows(), input2.getCols());
         Kosaraju kosaraju3 = new Kosaraju(input3.getRows(), input3.getCols());
         Kosaraju kosaraju4 = new Kosaraju(input4.getRows(), input4.getCols());
@@ -57,33 +60,55 @@ public class Main{
         Kosaraju kosaraju9 = new Kosaraju(input9.getRows(), input9.getCols());
         Kosaraju kosaraju10 = new Kosaraju(input10.getRows(), input10.getCols());
 
+        try (FileWriter writer = new FileWriter("output.csv")) {
+
+            System.out.println("Tarjan Algorithm (averaged over 1000 runs)");
+            writer.write("Tarjan,\n");
+            writer.write("n,Time(ms),File,\n");
+            SparseMatrix[] input = { input1, input2, input3, input4, input5, input6, input7, input8, input9, input10 };
+            Tarjan[] tarjan = { tarjan1, tarjan2, tarjan3, tarjan4, tarjan5, tarjan6, tarjan7, tarjan8, tarjan9,
+                    tarjan10 };
+            Kosaraju[] kosaraju = { kosaraju1, kosaraju2, kosaraju3, kosaraju4, kosaraju5, kosaraju6, kosaraju7,
+                    kosaraju8, kosaraju9, kosaraju10 };
 
 
-        
-        System.out.println("Tarjan Algorithm");
-        Tarjan[] tarjan = {tarjan1, tarjan2, tarjan3, tarjan4, tarjan5, tarjan6, tarjan7, tarjan8, tarjan9, tarjan10};
-        Kosaraju[] kosaraju = {kosaraju1, kosaraju2, kosaraju3, kosaraju4, kosaraju5, kosaraju6, kosaraju7, kosaraju8, kosaraju9, kosaraju10};
-        for(int i = 0; i < tarjan.length; i++){
-            stopwatch.start();
-            for(int j = 0; j < 100; j++)
-                tarjan[i].SCC();
-            stopwatch.stop();
-            System.out.println("Time: " + stopwatch.elapsedTime());
-            stopwatch.reset();
+
+            //TESTS
+            for(int i = 0; i < 10; i++){
+                if(tarjan[i].SCC().size() == kosaraju[i].runAlgorithm().size())
+                    System.out.println("\u001B[32m Test " + i + " passed, tarjan[i].SCC().size() == kosaraju[i].runAlgorithm().size()\u001B[0m");
+                else
+                    System.out.println("\u001B[31m Test " + i + " failed, tarjan[i].SCC().size() != kosaraju[i].runAlgorithm().size()\u001B[0m");
+                }
+
+            for (int i = 0; i < tarjan.length; i++) {
+                stopwatch.start();
+                for (int j = 0; j < 1; j++)
+                    tarjan[i].SCC();
+                stopwatch.stop();
+                writer.write(
+                        input[i].getCols().length + "," + stopwatch.elapsedTime() / 1000 + "," + filePaths[i] + ",\n");
+                System.out.println(stopwatch.elapsedTime() / 1000 + "ms for " + filePaths[i]);
+                stopwatch.reset();
+            }
+            System.out.println("Kosaraju Algorithm (averaged over 1000 runs)");
+            writer.write("Kosaraju,\n");
+            writer.write("n,Time(ms),File,\n");
+            for (int i = 0; i < kosaraju.length; i++) {
+                stopwatch.start();
+                for (int j = 0; j < 1; j++) {
+                    kosaraju[i].runAlgorithm();
+                }
+                stopwatch.stop();
+                writer.write(
+                        input[i].getCols().length + "," + stopwatch.elapsedTime() / 1000 + "," + filePaths[i] + ",\n");
+                System.out.println(stopwatch.elapsedTime() / 1000 + "ms for " + filePaths[i]);
+                stopwatch.reset();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        System.out.println("Kosaraju Algorithm");
-        for(int i = 0; i < kosaraju.length; i++){
-            stopwatch.start();
-            for(int j = 0; j < 100; j++)
-                kosaraju[i].runAlgorithm();
-            stopwatch.stop();
-            System.out.println("Time: " + stopwatch.elapsedTime());
-            stopwatch.reset();
-        }
-
-
-
-
     }
 
 }

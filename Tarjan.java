@@ -32,8 +32,8 @@ class Tarjan {
 	//		 of SCC)
 	// stackMember[] --> bit/index array for faster check
 	//				 whether a node is in stack
-	private void SCCUtil(int u, int low[], int disc[], boolean stackMember[], Stack<Integer> st) {
-
+	private ArrayList<SCC> SCCUtil(int u, int low[], int disc[], boolean stackMember[], Stack<Integer> st) {
+		ArrayList<SCC> scc = new ArrayList<SCC>();
 		// Initialize discovery time and low value
 		disc[u] = time;
 		low[u] = time;
@@ -46,7 +46,7 @@ class Tarjan {
 			int value = rowIndices[i];
 
 			if (disc[value] == -1) {
-				SCCUtil(value, low, disc, stackMember, st);
+				scc.addAll(SCCUtil(value, low, disc, stackMember, st));
 
 				// Check if the subtree rooted with value
 				// has a connection to one of the
@@ -68,22 +68,27 @@ class Tarjan {
 
 		// head node found, pop the stack and print an SCC
 		// To store stack extracted vertices
+		SCC s = new SCC(new ArrayList<Integer>());
 		int w = -1;
 		if (low[u] == disc[u]) {
 			while (w != u) {
 				w = (int)st.pop();
-				System.out.print(w + " ");
+				s.add(w);
+				// System.out.print(w + " ");
+
 				stackMember[w] = false;
 			}
-			System.out.println();
+			scc.add(s);
+			// System.out.println();
 		}
+		return scc;
 	}
 
 	// The function to do DFS traversal.
 	// It uses SCCUtil()
-	public void SCC()
+	public ArrayList<SCC> SCC()
 	{
-
+		ArrayList<SCC> scc = new ArrayList<SCC>();
 		// Mark all the vertices as not visited
 		// and Initialize parent and visited,
 		// and ap(articulation point) arrays
@@ -102,8 +107,9 @@ class Tarjan {
 		// in DFS tree rooted with vertex 'i'
 		for (int i = 0; i < colPtrs.length - 1; i++) {
 			if (disc[i] == -1)
-				SCCUtil(i, low, disc, stackMember, st);
+				scc.addAll(SCCUtil(i, low, disc, stackMember, st));
 		}
+		return scc;
 	}
 
 	// Driver code
@@ -117,7 +123,7 @@ class Tarjan {
         Tarjan graph = new Tarjan(testRowIndices, testColPointers);
 
         System.out.println("SCCs in the graph:");
-        graph.SCC();
+        System.out.println(graph.SCC());
  
     }
 }
