@@ -61,18 +61,18 @@ public class Kosaraju {
     }
     
     //Get Strongly connected components
-    private void getSCC(int value, boolean[] visited, List<Integer> SCC){
+    private void getSCC(int value, boolean[] visited, SCC scc){
         visited[value] = true;
-        SCC.add(value);
+        scc.add(value);
         for(int i = colPtrs[value]; i < colPtrs[value + 1]; i++){
             int neighbor = rowIndices[i];
             if(!visited[neighbor]){
-                getSCC(neighbor, visited, SCC);
+                getSCC(neighbor, visited, scc);
             }
         }
     }
 
-    public List<List<Integer>> runAlgorithm(){
+    public ArrayList<SCC> runAlgorithm(){
         Stack<Integer> stack = new Stack<>();
         boolean[] visited = new boolean[colPtrs.length - 1];
 
@@ -86,12 +86,13 @@ public class Kosaraju {
 
         Arrays.fill(visited, false);
 
-        List<List<Integer>> stronglyConnectedComponents = new ArrayList<>();
+        ArrayList<SCC> stronglyConnectedComponents = new ArrayList<>();
 
         while(!stack.isEmpty()){
             int value = stack.pop();
             if(!visited[value]){
-                List<Integer> scc = new ArrayList<>();
+                ArrayList<Integer> componentNodes = new ArrayList<>();
+                SCC scc = new SCC(componentNodes);
                 transpose.getSCC(value, visited, scc);
                 stronglyConnectedComponents.add(scc);
             }
@@ -103,9 +104,9 @@ public class Kosaraju {
         int[] testRowIndices = {0, 1, 2, 1, 4, 1, 2, 3, 4, 3, 4};  // Edges stored in order
         int[] testColPointers = {0, 1, 3, 6, 8, 11};  // Start index of each column
         Kosaraju testImplement = new Kosaraju(testRowIndices, testColPointers);
-        List<List<Integer>> stronglyConnectedComponents = testImplement.runAlgorithm();
+        ArrayList<SCC> stronglyConnectedComponents = testImplement.runAlgorithm();
         System.out.println("SCCs: ");
-        for(List<Integer>scc : stronglyConnectedComponents){
+        for(SCC scc : stronglyConnectedComponents){
             System.out.println(scc);
         }
     }
