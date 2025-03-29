@@ -97,17 +97,18 @@ public class Kosaraju {
                 stronglyConnectedComponents.add(scc);
             }
         }
+        stronglyConnectedComponents.remove(stronglyConnectedComponents.size()-1);
         return stronglyConnectedComponents;
     }
 
-    public static void main(String[] args){
-        int[] testRowIndices = {0, 1, 2, 1, 4, 1, 2, 3, 4, 3, 4};  // Edges stored in order
-        int[] testColPointers = {0, 1, 3, 6, 8, 11};  // Start index of each column
-        Kosaraju testImplement = new Kosaraju(testRowIndices, testColPointers);
-        ArrayList<SCC> stronglyConnectedComponents = testImplement.runAlgorithm();
-        System.out.println("SCCs: ");
-        for(SCC scc : stronglyConnectedComponents){
-            System.out.println(scc);
-        }
-    }
+    // public static void main(String[] args){
+    //     int[] testRowIndices = {0, 1, 2, 1, 4, 1, 2, 3, 4, 3, 4};  // Edges stored in order
+    //     int[] testColPointers = {0, 1, 3, 6, 8, 11};  // Start index of each column
+    //     Kosaraju testImplement = new Kosaraju(testRowIndices, testColPointers);
+    //     ArrayList<SCC> stronglyConnectedComponents = testImplement.runAlgorithm();
+    //     System.out.println("SCCs: ");
+    //     for(SCC scc : stronglyConnectedComponents){
+    //         System.out.println(scc);
+    //     }
+    // }
 }

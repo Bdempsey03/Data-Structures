@@ -128,8 +128,15 @@ public class Main {
                 stopwatch.reset();
             }
             for(int i = 0; i < 10; i++){
+                System.out.println(filePaths[i] + " Tarjan Algorithm: ");
                 EvaluatorV2.evaluate(new PMatrix(input[i].getRows(), input[i].getCols(), makePerm(input[i], tarjan[i].SCC())));
             }
+            for(int i = 0; i < 10; i++){
+                System.out.println(filePaths[i] + " Kosaraju Algorithm: ");
+                EvaluatorV2.evaluate(new PMatrix(input[i].getRows(), input[i].getCols(), makePerm(input[i], kosaraju[i].runAlgorithm())));
+            }
+
+            System.out.println(kosaraju9.runAlgorithm() + "\n" + tarjan9.SCC() + "\n" + kosaraju9.runAlgorithm().size() + "\n" + tarjan9.SCC().size());
             
 
 
@@ -142,6 +149,7 @@ public class Main {
         public static int[] makePerm(SparseMatrix original, ArrayList<SCC> SCCs){
         int[] perm = new int[original.getCols().length-1];
         for(SCC scc : SCCs){
+            
             for(int i = 0; i < scc.nodes.size(); i++){
                 perm[i] = scc.nodes.get(i);
             }

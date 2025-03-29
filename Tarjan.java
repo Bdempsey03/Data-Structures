@@ -109,27 +109,28 @@ class Tarjan {
 			if (disc[i] == -1)
 				scc.addAll(SCCUtil(i, low, disc, stackMember, st));
 		}
+		scc.remove(0);
 		return scc;
 	}
 
 	// Driver code
-	public static void main(String args[])
-    {
+	// public static void main(String args[])
+    // {
  
-        // Create a Tarjan given in the above diagram
-        int[] testRowIndices = {0, 1, 2, 1, 4, 1, 2, 3, 4, 3, 4};  // Edges stored in order
-        int[] testColPointers = {0, 1, 3, 6, 8, 11};  // Start index of each column
+    //     // Create a Tarjan given in the above diagram
+    //     int[] testRowIndices = {0, 1, 2, 1, 4, 1, 2, 3, 4, 3, 4};  // Edges stored in order
+    //     int[] testColPointers = {0, 1, 3, 6, 8, 11};  // Start index of each column
 
-        Tarjan graph = new Tarjan(testRowIndices, testColPointers);
+    //     Tarjan graph = new Tarjan(testRowIndices, testColPointers);
 
-        System.out.println("SCCs in the graph:");
-        System.out.println(graph.SCC());
+    //     System.out.println("SCCs in the graph:");
+    //     System.out.println(graph.SCC());
 
-        int[] newArr = Evaluator.makeInvPerm(testRowIndices, testColPointers, graph.SCC());
-		for(int e: newArr){
-			System.out.print(e + " ");
-		}
-    }
+    //     int[] newArr = Evaluator.makeInvPerm(testRowIndices, testColPointers, graph.SCC());
+	// 	for(int e: newArr){
+	// 		System.out.print(e + " ");
+	// 	}
+    // }
 }
 // This code is contributed by
 // Prateek Gupta (@prateekgupta10)
