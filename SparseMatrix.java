@@ -23,7 +23,7 @@ public class SparseMatrix {
         //split initial matrix info to get dimensions and nnz count
         String[] matrix_info = loop.split(" ");
 //      SparseMatrix matrix = new SparseMatrix(Integer.parseInt(matrix_info[0]), Integer.parseInt(matrix_info[1]), Integer.parseInt(matrix_info[2]));
-        cols =  new int[Integer.parseInt(matrix_info[1]) + 2];
+        cols =  new int[Integer.parseInt(matrix_info[1]) + 1];
         rows = new int[Integer.parseInt(matrix_info[2])];
         nnz = Integer.parseInt(matrix_info[2]);
 
@@ -49,7 +49,7 @@ public class SparseMatrix {
                 while (y < coordinates.size() && coordinates.get(y).getCol() == x) {
                     count++;
                     if(this.getCols().length > x + 1) {
-                        this.setCols(x + 1, count);
+                        this.setCols(x, count);
                     }
 
                     if(y < this.getRows().length) {
@@ -59,7 +59,7 @@ public class SparseMatrix {
                 }
             }else{
                 if(this.getCols().length > x + 1) {
-                    this.setCols(x + 1, count);
+                    this.setCols(x, count);
                 }
             }
 
@@ -68,8 +68,9 @@ public class SparseMatrix {
             }
 
         }
-        // System.out.println(Arrays.toString(this.getRows()));
-        // System.out.println(Arrays.toString(this.getCols()));
+        this.setCols(this.cols.length - 1, nnz);
+        System.out.println(Arrays.toString(this.getRows()));
+        System.out.println(Arrays.toString(this.getCols()));
     }
 
     public int getNnz() {
