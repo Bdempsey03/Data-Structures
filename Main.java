@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -24,7 +25,6 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        Evaluator evaluator = new Evaluator(); //what the hell
 
         input1 = new SparseMatrix(new File(filePaths[0]));
         input2 = new SparseMatrix(new File(filePaths[1]));
@@ -105,7 +105,7 @@ public class Main {
 
             for (int i = 0; i < tarjan.length; i++) {
                 stopwatch.start();
-                for (int j = 0; j < 1000; j++)
+                for (int j = 0; j < 10; j++)
                     tarjan[i].SCC();
                 stopwatch.stop();
                 writer.write(
@@ -118,7 +118,7 @@ public class Main {
             writer.write("n,Time(ms),File,\n");
             for (int i = 0; i < kosaraju.length; i++) {
                 stopwatch.start();
-                for (int j = 0; j < 1000; j++) {
+                for (int j = 0; j < 10; j++) {
                     kosaraju[i].runAlgorithm();
                 }
                 stopwatch.stop();
@@ -127,6 +127,10 @@ public class Main {
                 System.out.println(stopwatch.elapsedTime() / 1000 + "ms for " + filePaths[i]);
                 stopwatch.reset();
             }
+            for(int i = 0; i < 10; i++){
+                EvaluatorV2.evaluate(new PMatrix(input[i].getRows(), input[i].getCols(), makePerm(input[i], tarjan[i].SCC())));
+            }
+            
 
 
             
@@ -134,6 +138,17 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+        public static int[] makePerm(SparseMatrix original, ArrayList<SCC> SCCs){
+        int[] perm = new int[original.getCols().length-1];
+        for(SCC scc : SCCs){
+            for(int i = 0; i < scc.nodes.size(); i++){
+                perm[i] = scc.nodes.get(i);
+            }
+        }
+        
+       
+        return perm;
     }
 
 }
