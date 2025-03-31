@@ -104,16 +104,22 @@ public class Main {
                 System.out.println(stopwatch.elapsedTime() / 1000 + "ms for " + filePaths[i]);
                 stopwatch.reset();
             }
+
+            try (FileWriter writerEval = new FileWriter("outputEval.csv")) {
+
+            writerEval.write("Tarjan Algorithm Evaluation,\n");
             for(int i = 0; i < 10; i++){
                 System.out.println(filePaths[i] + " Tarjan Algorithm: ");
-                Evaluator.evaluate(new PMatrix(input[i].getRows(), input[i].getCols(), makePerm(input[i], tarjan[i].SCC())));
+                writerEval.write(Evaluator.evaluate(new PMatrix(input[i].getRows(), input[i].getCols(), makePerm(input[i], tarjan[i].SCC()))));
+                writerEval.write(filePaths[i] + "\n");
+
             }
+            writerEval.write("Kosaraju Algorithm Evaluation,\n");
             for(int i = 0; i < 10; i++){
                 System.out.println(filePaths[i] + " Kosaraju Algorithm: ");
-                Evaluator.evaluate(new PMatrix(input[i].getRows(), input[i].getCols(), makePerm(input[i], kosaraju[i].runAlgorithm())));
+                writerEval.write(Evaluator.evaluate(new PMatrix(input[i].getRows(), input[i].getCols(), makePerm(input[i], kosaraju[i].runAlgorithm()))));
+                writerEval.write(filePaths[i] + "\n");
             }
-
-            System.out.println(kosaraju9.runAlgorithm() + "\n" + tarjan9.SCC() + "\n" + kosaraju9.runAlgorithm().size() + "\n" + tarjan9.SCC().size());
             
 
 
@@ -122,6 +128,7 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
     }
         public static int[] makePerm(SparseMatrix original, ArrayList<SCC> SCCs){
         int[] perm = new int[original.getCols().length-1];
